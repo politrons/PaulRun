@@ -1,5 +1,6 @@
 package com.politrons.engine
 
+import com.politrons.SpriteUtils.changeImageIcon
 import com.politrons.sprite.Hero
 
 import java.awt.event.{ActionEvent, ActionListener, KeyAdapter, KeyEvent}
@@ -13,6 +14,8 @@ class HeroEngine(var xPos: Integer,
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
   val hero = new Hero(xPos, yPos)
+
+  private var frame = 1
 
   // - Y -> Tuple land range from X
   val collisionLand: List[Tuple2[Int, Tuple2[Int, Int]]] = List(
@@ -78,6 +81,12 @@ class HeroEngine(var xPos: Integer,
     }
   }
 
+  private def increaseFrame(): Int = {
+    if (frame == 2) frame = 1
+    else frame += 1
+    frame
+  }
+
   /**
    * Key Listener for bird mode
    */
@@ -86,25 +95,24 @@ class HeroEngine(var xPos: Integer,
     override def keyPressed(e: KeyEvent): Unit = {
       e.getKeyCode match {
         case KeyEvent.VK_SPACE =>
-          //          imageIcon = changeImageIcon(images(s"left-" + increaseFrame))
+//          hero.imageIcon = changeImageIcon(hero.images(s"left-" + increaseFrame()))
           hero.y -= 50
         case KeyEvent.VK_LEFT =>
           hero.x -= 20
-        //          imageIcon = changeImageIcon(images(s"left-" + increaseFrame))
+          hero.imageIcon = changeImageIcon(hero.images(s"left-" + increaseFrame()))
         case KeyEvent.VK_RIGHT =>
           hero.x += 20
-        //          imageIcon = changeImageIcon(images(s"left-" + increaseFrame))
-        case KeyEvent.VK_UP =>
-          hero.y -= 10
-        //          imageIcon = changeImageIcon(images(s"up-" + increaseFrame))
-        case KeyEvent.VK_DOWN =>
-          hero.y += 10
-        //          imageIcon = changeImageIcon(images(s"down-" + increaseFrame))
+          hero.imageIcon = changeImageIcon(hero.images(s"right-" + increaseFrame()))
+//        case KeyEvent.VK_UP =>
+//          hero.y -= 10
+//          hero.imageIcon = changeImageIcon(hero.images(s"up-" + increaseFrame()))
+//        case KeyEvent.VK_DOWN =>
+//          hero.y += 10
+//          hero.imageIcon = changeImageIcon(hero.images(s"down-" + increaseFrame()))
         case _ =>
           println("Key not implemented")
       }
     }
   }
-
 
 }

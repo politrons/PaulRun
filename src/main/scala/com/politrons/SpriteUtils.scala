@@ -2,6 +2,7 @@ package com.politrons
 
 import java.awt.image.BufferedImage
 import java.awt.{Image, RenderingHints}
+import javax.swing.ImageIcon
 
 object SpriteUtils {
 
@@ -14,4 +15,7 @@ object SpriteUtils {
     resizedImg
   }
 
+  def changeImageIcon(imageIcon: ImageIcon): ImageIcon = {
+    new ImageIcon(scaleImage(imageIcon.getImage, 40, 40))
+  }
 }
