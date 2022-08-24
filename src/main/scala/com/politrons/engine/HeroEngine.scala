@@ -28,7 +28,14 @@ class HeroEngine(var xPos: Integer,
     new Tuple2(290, new Tuple2(795, 915)),
     new Tuple2(340, new Tuple2(915, 1030)),
     new Tuple2(85, new Tuple2(960, 1030)),
-    new Tuple2(495, new Tuple2(650,710 ))
+    new Tuple2(495, new Tuple2(650, 710))
+  )
+
+  val collisionBridge: List[Tuple2[Int, Tuple2[Int, Int]]] = List(
+    new Tuple2(100, new Tuple2(210, 230)),
+    new Tuple2(120, new Tuple2(170, 210)),
+    new Tuple2(140, new Tuple2(150, 170)),
+    new Tuple2(160, new Tuple2(30, 150))
   )
   init()
 
@@ -60,7 +67,7 @@ class HeroEngine(var xPos: Integer,
   def startGravity(): Unit = {
     Future {
       while (true) {
-        val maybeCollision = collisionLand.find(gravity => {
+        val maybeCollision = (collisionLand ++ collisionBridge).find(gravity => {
           (gravity._1 == hero.y) && (hero.x >= gravity._2._1 && hero.x <= gravity._2._2)
         })
         if (maybeCollision.isEmpty) {
