@@ -113,11 +113,14 @@ class HeroEngine(var xPos: Integer,
       hero.x = 810
       hero.y = 267
       setLocation(hero.x, hero.y)
-      0 to 5 foreach { _ =>
+      0 to 50 foreach { _ =>
         setIcon(null)
-        Thread.sleep(500)
+        Thread.sleep(10)
         setIcon(hero.imageIcon)
-        Thread.sleep(500)
+        Thread.sleep(10)
+        setIcon(null)
+        Thread.sleep(10)
+        setIcon(hero.imageIcon)
       }
     }
   }
