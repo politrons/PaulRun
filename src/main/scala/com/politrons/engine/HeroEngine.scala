@@ -10,7 +10,8 @@ import scala.collection.mutable
 import scala.concurrent.{ExecutionContext, Future}
 
 class HeroEngine(var xPos: Integer,
-                 var yPos: Integer) extends JLabel with ActionListener {
+                 var yPos: Integer,
+                 var movements:Int=0) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
@@ -76,6 +77,8 @@ class HeroEngine(var xPos: Integer,
         })
         if (maybeCollision.isEmpty) {
           hero.y += 1
+        }else{
+          movements=0
         }
         Thread.sleep(5)
       }
@@ -96,15 +99,18 @@ class HeroEngine(var xPos: Integer,
     private val pressedKeys = new mutable.HashSet[Int]()
 
     override def keyPressed(e: KeyEvent): Unit = {
-      pressedKeys.add(e.getKeyCode)
-      if (pressedKeys.contains(KeyEvent.VK_LEFT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
-        hero.y -= 75
-        hero.x -= 100
-      }else if (pressedKeys.contains(KeyEvent.VK_RIGHT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
-        hero.y -= 75
-        hero.x += 100
-      } else {
-        singleKeyPressed(e)
+      if (movements < 4) {
+        movements += 1
+        pressedKeys.add(e.getKeyCode)
+        if (pressedKeys.contains(KeyEvent.VK_LEFT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
+          hero.y -= 75
+          hero.x -= 100
+        } else if (pressedKeys.contains(KeyEvent.VK_RIGHT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
+          hero.y -= 75
+          hero.x += 100
+        } else {
+          singleKeyPressed(e)
+        }
       }
     }
 
