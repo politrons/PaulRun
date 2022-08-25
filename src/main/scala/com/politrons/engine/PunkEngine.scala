@@ -26,11 +26,11 @@ class PunkEngine(var name: String,
     setFocusable(true)
     setIcon(punk.imageIcon)
     setSize(this.getPreferredSize)
-    movePatternEnemyAction()
+    movePatternAction()
 //    collisionEngine()
   }
 
-  def movePatternEnemyAction(): Future[Unit] = {
+  def movePatternAction(): Future[Unit] = {
     Future {
       while (enemyAlive) {
         movePattern
@@ -48,16 +48,16 @@ class PunkEngine(var name: String,
   def applyEnemyMovement(move: String): Unit = {
     move match {
       case "left" =>
-        punk.x = -5
+        punk.x -= 5
         punk.imageIcon = changeImageIcon(punk.images("left-" + increaseFrame))
       case "right" =>
-        punk.x = 5
+        punk.x += 5
         punk.imageIcon = changeImageIcon(punk.images("right-" + increaseFrame))
       case "up" =>
-        punk.y = -5
+        punk.y -= 5
         punk.imageIcon = changeImageIcon(punk.images("up-" + increaseFrame))
       case "down" =>
-        punk.y = 5
+        punk.y += 5
         punk.imageIcon = changeImageIcon(punk.images("down-" + increaseFrame))
       case "stop" =>
         punk.x = 0
