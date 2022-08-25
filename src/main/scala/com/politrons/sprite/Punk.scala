@@ -1,6 +1,6 @@
 package com.politrons.sprite
 
-import com.politrons.SpriteUtils._
+import SpriteUtils._
 
 import java.awt.Image
 import javax.swing.ImageIcon

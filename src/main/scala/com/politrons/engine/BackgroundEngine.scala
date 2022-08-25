@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.SpriteUtils.scaleImage
+import com.politrons.sprite.SpriteUtils.scaleImage
 
 import java.awt.Image
 import javax.swing.*

@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.SpriteUtils.changeImageIcon
+import com.politrons.sprite.SpriteUtils.changeImageIcon
 import com.politrons.sprite.Punk
 
 import java.util.concurrent.Executors
@@ -12,6 +12,7 @@ class PunkEngine(var name: String,
                  var xPos: Integer,
                  var yPos: Integer,
                  val movePattern: Seq[String],
+                 val heroEngine: HeroEngine,
                  var enemyAlive: Boolean = true
                  ) extends JLabel {
 
@@ -27,7 +28,7 @@ class PunkEngine(var name: String,
     setIcon(punk.imageIcon)
     setSize(this.getPreferredSize)
     movePatternAction()
-//    collisionEngine()
+    collisionEngine()
   }
 
   def movePatternAction(): Future[Unit] = {
@@ -72,33 +73,27 @@ class PunkEngine(var name: String,
     else frame += 1
     frame
   }
-//
-//  /**
-//   * As long as enemies are alive, we check constantly if any of the enemies of the map hit the main character.
-//   * Function to check if the character collision with an enemy.
-//   * In case of collision we reduce one heart in the level, and we set
-//   * the character like dead.
-//   * In case we lose all hearts the game is over.
-//   */
-//  private def collisionEngine() = {
-//    Future {
-//      val deviation = 10
-//      while (enemyAlive) {
-//        val xComp = Math.abs(characterEngine.character.x - enemy.x)
-//        val yComp = Math.abs(characterEngine.character.y - enemy.y)
-//        if (xComp <= deviation && yComp <= deviation) {
-//          characterEngine.live match {
-//            case 3 => heart3Engine.removeHeart()
-//            case 2 => heart2Engine.removeHeart()
-//            case 1 => heart1Engine.removeHeart(); gameOverEngine.setVisible(true)
-//          }
-//          characterEngine.live -= 1
-//          characterEngine.characterDeadAnimation()
-//        }
-//        Thread.sleep(100)
-//      }
-//    }
-//  }
+
+  /**
+   * As long as enemies are alive, we check constantly if any of the enemies of the map hit the main character.
+   * Function to check if the character collision with an enemy.
+   * In case of collision we reduce one heart in the level, and we set
+   * the character like dead.
+   * In case we lose all hearts the game is over.
+   */
+  private def collisionEngine() = {
+    Future {
+      val deviation = 10
+      while (enemyAlive) {
+        val xComp = Math.abs(heroEngine.hero.x - punk.x)
+        val yComp = Math.abs(heroEngine.hero.y - punk.y)
+        if (xComp <= deviation && yComp <= deviation) {
+          heroEngine.setDeadHero()
+        }
+        Thread.sleep(100)
+      }
+    }
+  }
 //
 //  private def checkThunderboltCollision(): Unit = {
 //    val deviation = 10

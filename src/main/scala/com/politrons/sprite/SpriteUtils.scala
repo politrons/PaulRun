@@ -1,4 +1,4 @@
-package com.politrons
+package com.politrons.sprite
 
 import java.awt.image.BufferedImage
 import java.awt.{Image, RenderingHints}

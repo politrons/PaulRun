@@ -1,6 +1,6 @@
 package com.politrons.engine
 
-import com.politrons.SpriteUtils.changeImageIcon
+import com.politrons.sprite.SpriteUtils.changeImageIcon
 import com.politrons.sprite.Hero
 
 import java.awt.event.{ActionEvent, ActionListener, KeyAdapter, KeyEvent}
@@ -11,7 +11,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class HeroEngine(var xPos: Integer,
                  var yPos: Integer,
-                 var movements:Int=0) extends JLabel with ActionListener {
+                 val heartEngine1: HeartEngine,
+                 val heartEngine2: HeartEngine,
+                 val heartEngine3: HeartEngine,
+                 var movements: Int = 0,
+                 var live: Int = 3) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
@@ -42,6 +46,7 @@ class HeroEngine(var xPos: Integer,
     new Tuple2(140, new Tuple2(150, 170)),
     new Tuple2(160, new Tuple2(30, 150))
   )
+
   init()
 
   private def init(): Unit = {
@@ -69,7 +74,7 @@ class HeroEngine(var xPos: Integer,
   /**
    * Task with the governance of apply gravity in the hero.
    */
-  def startGravity(): Unit = {
+  private def startGravity(): Unit = {
     Future {
       while (true) {
         val maybeCollision = (collisionLand ++ collisionBridge).find(gravity => {
@@ -77,10 +82,40 @@ class HeroEngine(var xPos: Integer,
         })
         if (maybeCollision.isEmpty) {
           hero.y += 1
-        }else{
-          movements=0
+          if (hero.y > 800) {
+            setDeadHero()
+          }
+        } else {
+          movements = 0
         }
         Thread.sleep(5)
+      }
+    }
+  }
+
+  def setDeadHero(): Unit ={
+    live match {
+      case 3 => heartEngine3.removeHeart()
+      case 2 => heartEngine2.removeHeart()
+      case 1 => heartEngine1.removeHeart(); //gameOverEngine.setVisible(true)
+    }
+    live -= 1
+    heroDeadAnimation()
+  }
+
+  /**
+   * Move hero to the initial position and make an effect of reset
+   */
+  private def heroDeadAnimation(): Unit = {
+    Future {
+      hero.x = 810
+      hero.y = 267
+      setLocation(hero.x, hero.y)
+      0 to 5 foreach { _ =>
+        setIcon(null)
+        Thread.sleep(500)
+        setIcon(hero.imageIcon)
+        Thread.sleep(500)
       }
     }
   }
@@ -98,16 +133,19 @@ class HeroEngine(var xPos: Integer,
 
     private val pressedKeys = new mutable.HashSet[Int]()
 
+    /**
+     * Only 4 movements in the air are allowed, every time we reach gthe land, the counter of movement is set to 0
+     */
     override def keyPressed(e: KeyEvent): Unit = {
       if (movements < 4) {
         movements += 1
         pressedKeys.add(e.getKeyCode)
         if (pressedKeys.contains(KeyEvent.VK_LEFT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
-          hero.y -= 75
-          hero.x -= 100
+          hero.y -= 50
+          hero.x -= 125
         } else if (pressedKeys.contains(KeyEvent.VK_RIGHT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
-          hero.y -= 75
-          hero.x += 100
+          hero.y -= 50
+          hero.x += 125
         } else {
           singleKeyPressed(e)
         }
