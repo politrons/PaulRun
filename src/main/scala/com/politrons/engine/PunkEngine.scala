@@ -13,6 +13,7 @@ class PunkEngine(var name: String,
                  var yPos: Integer,
                  val movePattern: Seq[String],
                  val heroEngine: HeroEngine,
+                 val thunderboltEngine: ThunderboltEngine,
                  var enemyAlive: Boolean = true
                  ) extends JLabel {
 
@@ -38,7 +39,7 @@ class PunkEngine(var name: String,
           .foreach(move => {
             if (enemyAlive) {
               applyEnemyMovement(move)
-//              checkThunderboltCollision()
+              checkThunderboltCollision()
               Thread.sleep(100)
             }
           })
@@ -75,10 +76,9 @@ class PunkEngine(var name: String,
   }
 
   /**
-   * As long as enemies are alive, we check constantly if any of the enemies of the map hit the main character.
-   * Function to check if the character collision with an enemy.
-   * In case of collision we reduce one heart in the level, and we set
-   * the character like dead.
+   * As long as enemies are alive, we check constantly if any of the enemies of the map hit the main hero.
+   * Function to check if the hero collision with an enemy.
+   * In case of collision we reduce one heart in the level, and we set the hero like dead.
    * In case we lose all hearts the game is over.
    */
   private def collisionEngine() = {
@@ -94,21 +94,19 @@ class PunkEngine(var name: String,
       }
     }
   }
-//
-//  private def checkThunderboltCollision(): Unit = {
-//    val deviation = 10
-//    val charX = thunderboltEngine.thunderbolt.x
-//    val charY = thunderboltEngine.thunderbolt.y
-//    val xComp = Math.abs(charX - enemy.x)
-//    val yComp = Math.abs(charY - enemy.y)
-//    if (xComp <= deviation && yComp <= deviation) {
-//      enemyDeadAnimation()
-//      setLocation(0, 0)
-//      enemyAlive = false
-//    }
-//  }
 
-  private def enemyDeadAnimation(): Unit = {
+  private def checkThunderboltCollision(): Unit = {
+    val deviation = 10
+    val xComp = Math.abs(thunderboltEngine.thunderbolt.x - punk.x)
+    val yComp = Math.abs(thunderboltEngine.thunderbolt.y - punk.y)
+    if (xComp <= deviation && yComp <= deviation) {
+      deadAnimation()
+      setLocation(0, 0)
+      enemyAlive = false
+    }
+  }
+
+  private def deadAnimation(): Unit = {
       punk.x = 540
       punk.y = 78
       0 to 50 foreach { _ =>
