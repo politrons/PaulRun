@@ -14,7 +14,7 @@ class HeroEngine(var xPos: Integer,
                  val heartEngine1: HeartEngine,
                  val heartEngine2: HeartEngine,
                  val heartEngine3: HeartEngine,
-                 val thunderboltEngine: ThunderboltEngine,
+                 val thunderboltEngine: BulletEngine,
                  var movements: Int = 0,
                  var live: Int = 3) extends JLabel with ActionListener {
 
@@ -25,7 +25,11 @@ class HeroEngine(var xPos: Integer,
   private var orientation = ""
   private var frame = 1
 
-  // - Y -> Tuple land range from X
+  /**
+   * Map of land where the hero has to stop in case is going down.
+   * Each Y coordinate has a range of land specify with X1-X2
+   * Y -> Tuple land range from X
+   */
   val collisionLand: List[Tuple2[Int, Tuple2[Int, Int]]] = List(
     new Tuple2(575, new Tuple2(0, 300)),
     new Tuple2(320, new Tuple2(240, 350)),
@@ -61,6 +65,10 @@ class HeroEngine(var xPos: Integer,
     startGravity()
   }
 
+  /**
+   * Confogiure how fast do you want the [actionPerformed] to be invoked 
+   * to refresh frames in the game.
+   */
   private def setFrameDelay(): Unit = {
     val DELAY = 1
     val timer = new Timer(DELAY, this)
@@ -75,6 +83,7 @@ class HeroEngine(var xPos: Integer,
 
   /**
    * Task with the governance of apply gravity in the hero.
+   * Also check if the hero go down out of the map to lose a life.
    */
   private def startGravity(): Unit = {
     Future {
@@ -84,7 +93,7 @@ class HeroEngine(var xPos: Integer,
         })
         if (maybeCollision.isEmpty) {
           hero.y += 1
-          if (hero.y > 800) {
+          if (isEndOfLevel) {
             setDeadHero()
           }
         } else {
@@ -95,7 +104,14 @@ class HeroEngine(var xPos: Integer,
     }
   }
 
-  def setDeadHero(): Unit ={
+  private def isEndOfLevel = {
+    hero.y > 800
+  }
+
+  /**
+   * Reduce the number of hearts(lifes) and run the hero animation of dead
+   */
+  def setDeadHero(): Unit = {
     live match {
       case 3 => heartEngine3.removeHeart()
       case 2 => heartEngine2.removeHeart()
@@ -148,11 +164,11 @@ class HeroEngine(var xPos: Integer,
         if (pressedKeys.contains(KeyEvent.VK_LEFT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
           hero.y -= 50
           hero.x -= 125
-          orientation="left"
+          orientation = "left"
         } else if (pressedKeys.contains(KeyEvent.VK_RIGHT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
           hero.y -= 50
           hero.x += 125
-          orientation="right"
+          orientation = "right"
         } else {
           singleKeyPressed(e)
         }
@@ -171,11 +187,11 @@ class HeroEngine(var xPos: Integer,
         hero.y -= 100
       case KeyEvent.VK_LEFT =>
         hero.x -= 20
-        orientation="left"
+        orientation = "left"
         hero.imageIcon = changeImageIcon(hero.images(s"$orientation-" + increaseFrame()))
       case KeyEvent.VK_RIGHT =>
         hero.x += 20
-        orientation="right"
+        orientation = "right"
         hero.imageIcon = changeImageIcon(hero.images(s"$orientation-" + increaseFrame()))
       case KeyEvent.VK_DOWN =>
         hero.y += 10

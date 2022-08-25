@@ -21,7 +21,7 @@ We have different engines that introduce the logic of the game:
 
 ![My image](img/punk.png) 
 
-* **ThunderboltEngine:** All the logic and physics of direction of thunderbolt.
+* **BulletEngine:** All the logic and physics of direction of bullet.
 
 ## How to Play
 

@@ -1,16 +1,16 @@
 package com.politrons.engine
 
-import com.politrons.sprite.Thunderbolt
+import com.politrons.sprite.Bullet
 
 import java.util.concurrent.Executors
 import javax.swing.*
 import scala.concurrent.{ExecutionContext, Future}
 
-class ThunderboltEngine() extends JLabel {
+class BulletEngine() extends JLabel {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
-  val thunderbolt = new Thunderbolt(250,250)
+  val thunderbolt = new Bullet(250,250)
 
   init()
 

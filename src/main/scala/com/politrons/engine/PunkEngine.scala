@@ -13,7 +13,7 @@ class PunkEngine(var name: String,
                  var yPos: Integer,
                  val movePattern: Seq[String],
                  val heroEngine: HeroEngine,
-                 val thunderboltEngine: ThunderboltEngine,
+                 val bulletEngine: BulletEngine,
                  var enemyAlive: Boolean = true
                  ) extends JLabel {
 
@@ -32,6 +32,11 @@ class PunkEngine(var name: String,
     collisionEngine()
   }
 
+  /**
+   * Task to governance of the movement of the punk enemy.
+   * Also after make every move we check if the enemy has been hit
+   * by a bullet
+   */
   def movePatternAction(): Future[Unit] = {
     Future {
       while (enemyAlive) {
@@ -95,10 +100,13 @@ class PunkEngine(var name: String,
     }
   }
 
+  /**
+   * Function to check if the punk it's been hit by the bullet
+   */
   private def checkThunderboltCollision(): Unit = {
     val deviation = 10
-    val xComp = Math.abs(thunderboltEngine.thunderbolt.x - punk.x)
-    val yComp = Math.abs(thunderboltEngine.thunderbolt.y - punk.y)
+    val xComp = Math.abs(bulletEngine.thunderbolt.x - punk.x)
+    val yComp = Math.abs(bulletEngine.thunderbolt.y - punk.y)
     if (xComp <= deviation && yComp <= deviation) {
       deadAnimation()
       setLocation(0, 0)
