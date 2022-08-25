@@ -1,6 +1,6 @@
 package com.politrons
 
-import com.politrons.Level
+import com.politrons.level.Level
 
 import java.awt.EventQueue
 
