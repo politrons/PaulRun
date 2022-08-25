@@ -98,28 +98,13 @@ class HeroEngine(var xPos: Integer,
     override def keyPressed(e: KeyEvent): Unit = {
       pressedKeys.add(e.getKeyCode)
       if (pressedKeys.contains(KeyEvent.VK_LEFT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
-        hero.y -= 100
+        hero.y -= 75
         hero.x -= 100
+      }else if (pressedKeys.contains(KeyEvent.VK_RIGHT) && pressedKeys.contains(KeyEvent.VK_SPACE)) {
+        hero.y -= 75
+        hero.x += 100
       } else {
-        e.getKeyCode match {
-          case KeyEvent.VK_SPACE =>
-            //          hero.imageIcon = changeImageIcon(hero.images(s"left-" + increaseFrame()))
-            hero.y -= 100
-          case KeyEvent.VK_LEFT =>
-            hero.x -= 20
-            hero.imageIcon = changeImageIcon(hero.images(s"left-" + increaseFrame()))
-          case KeyEvent.VK_RIGHT =>
-            hero.x += 20
-            hero.imageIcon = changeImageIcon(hero.images(s"right-" + increaseFrame()))
-          case KeyEvent.VK_UP =>
-            hero.y -= 10
-          //          hero.imageIcon = changeImageIcon(hero.images(s"up-" + increaseFrame()))
-          case KeyEvent.VK_DOWN =>
-            hero.y += 10
-          //          hero.imageIcon = changeImageIcon(hero.images(s"down-" + increaseFrame()))
-          case _ =>
-            println("Key not implemented")
-        }
+        singleKeyPressed(e)
       }
     }
 
@@ -129,4 +114,25 @@ class HeroEngine(var xPos: Integer,
 
   }
 
+  private def singleKeyPressed(e: KeyEvent) = {
+    e.getKeyCode match {
+      case KeyEvent.VK_SPACE =>
+        //          hero.imageIcon = changeImageIcon(hero.images(s"left-" + increaseFrame()))
+        hero.y -= 100
+      case KeyEvent.VK_LEFT =>
+        hero.x -= 20
+        hero.imageIcon = changeImageIcon(hero.images(s"left-" + increaseFrame()))
+      case KeyEvent.VK_RIGHT =>
+        hero.x += 20
+        hero.imageIcon = changeImageIcon(hero.images(s"right-" + increaseFrame()))
+      case KeyEvent.VK_UP =>
+        hero.y -= 10
+      //          hero.imageIcon = changeImageIcon(hero.images(s"up-" + increaseFrame()))
+      case KeyEvent.VK_DOWN =>
+        hero.y += 10
+      //          hero.imageIcon = changeImageIcon(hero.images(s"down-" + increaseFrame()))
+      case _ =>
+        println("Key not implemented")
+    }
+  }
 }
