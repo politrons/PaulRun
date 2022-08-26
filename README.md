@@ -2,7 +2,7 @@
 
 Is this repo useful? Please ⭑Star this repository and share the love.
 
-Platform 2D Game base on ```Javax.Swing``` implemented in [Scala](https://www.scala-lang.org).
+Platform 2D Game base on ```Javax.Swing``` implemented in [Scala3](https://www.scala-lang.org).
 
 All Sprites has been implemented using [piskelapp](https://www.piskelapp.com/) webpage.
 

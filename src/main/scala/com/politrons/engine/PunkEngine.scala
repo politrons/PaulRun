@@ -15,7 +15,7 @@ class PunkEngine(var name: String,
                  val heroEngine: HeroEngine,
                  val bulletEngine: BulletEngine,
                  var enemyAlive: Boolean = true
-                 ) extends JLabel {
+                ) extends JLabel {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
@@ -52,7 +52,7 @@ class PunkEngine(var name: String,
     }
   }
 
-  def applyEnemyMovement(move: String): Unit = {
+  def applyEnemyMovement(move: String | Int): Unit = {
     move match {
       case "left" =>
         punk.x -= 5
@@ -66,9 +66,10 @@ class PunkEngine(var name: String,
       case "down" =>
         punk.y += 5
         punk.imageIcon = changeImageIcon(punk.images("down-" + increaseFrame))
-      case "stop" =>
-        punk.x = 0
+      case -1 =>
+        punk.x = -100
         punk.y = 0
+      case _ => println("No movement configure")
     }
     setIcon(punk.imageIcon)
     setLocation(punk.x, punk.y)
@@ -79,6 +80,9 @@ class PunkEngine(var name: String,
     else frame += 1
     frame
   }
+
+  //  def (user:User).getUserInfo():String = s"Name:${user.name}, Surname${user.surname}, Age:${user.age} "
+
 
   /**
    * As long as enemies are alive, we check constantly if any of the enemies of the map hit the main hero.
@@ -109,22 +113,22 @@ class PunkEngine(var name: String,
     val yComp = Math.abs(bulletEngine.bullet.y - punk.y)
     if (xComp <= deviation && yComp <= deviation) {
       deadAnimation()
-      setLocation(0, 0)
+      applyEnemyMovement(-1)
       enemyAlive = false
     }
   }
 
   private def deadAnimation(): Unit = {
-      punk.x = 540
-      punk.y = 78
-      0 to 50 foreach { _ =>
-        setIcon(null)
-        Thread.sleep(10)
-        setIcon(punk.imageIcon)
-        Thread.sleep(10)
-        setIcon(null)
-        Thread.sleep(10)
-      }
+    punk.x = 540
+    punk.y = 78
+    0 to 50 foreach { _ =>
+      setIcon(null)
+      Thread.sleep(10)
+      setIcon(punk.imageIcon)
+      Thread.sleep(10)
+      setIcon(null)
+      Thread.sleep(10)
+    }
   }
 
 
