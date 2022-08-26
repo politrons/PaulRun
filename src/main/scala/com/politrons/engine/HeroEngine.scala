@@ -11,12 +11,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class HeroEngine(var xPos: Integer,
                  var yPos: Integer,
-                 val heartEngine1: HeartEngine,
-                 val heartEngine2: HeartEngine,
-                 val heartEngine3: HeartEngine,
+                 val heartEngines: List[HeartEngine],
                  val thunderboltEngine: BulletEngine,
                  var movements: Int = 0,
-                 var live: Int = 3) extends JLabel with ActionListener {
+                 var life: Int = 3) extends JLabel with ActionListener {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
@@ -112,12 +110,8 @@ class HeroEngine(var xPos: Integer,
    * Reduce the number of hearts(lifes) and run the hero animation of dead
    */
   def setDeadHero(): Unit = {
-    live match {
-      case 3 => heartEngine3.removeHeart()
-      case 2 => heartEngine2.removeHeart()
-      case 1 => heartEngine1.removeHeart(); //gameOverEngine.setVisible(true)
-    }
-    live -= 1
+    life -= 1
+    heartEngines(life).removeHeart()
     heroDeadAnimation()
   }
 

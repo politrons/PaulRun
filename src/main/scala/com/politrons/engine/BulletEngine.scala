@@ -21,11 +21,11 @@ class BulletEngine() extends JLabel {
     setLocation(bullet.x, bullet.y)
   }
 
-  def directionOfBullet(orientation:String, characterX: Int, characterY: Int): Unit = {
+  def directionOfBullet(orientation:String, heroX: Int, heroY: Int): Unit = {
     val bulletDuration = System.currentTimeMillis() + 5000
     Future {
-      bullet.x = characterX
-      bullet.y = characterY
+      bullet.x = heroX
+      bullet.y = heroY
       while (bulletDuration > System.currentTimeMillis()) {
         println(s"########### Bullet X:${bullet.x} Y:${bullet.y}")
         orientation match {

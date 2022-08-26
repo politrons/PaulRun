@@ -15,7 +15,7 @@ class Level extends JFrame {
   val heart1Engine = new HeartEngine(100, 10)
   val heart2Engine = new HeartEngine(70, 10)
   val heart3Engine = new HeartEngine(40, 10)
-  val heroEngine = new HeroEngine(810, 267, heart1Engine, heart2Engine, heart3Engine, bulletEngine)
+  val heroEngine = new HeroEngine(810, 267, List(heart1Engine, heart2Engine, heart3Engine), bulletEngine)
   val punk1 = new PunkEngine("Punk1", 270, 575, punk1MovePattern, heroEngine, bulletEngine)
   val punk2 = new PunkEngine("Punk2", 490, 525, punk2MovePattern, heroEngine, bulletEngine)
   val punk3 = new PunkEngine("Punk3", 250, 320, punk3MovePattern, heroEngine, bulletEngine)
