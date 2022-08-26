@@ -29,7 +29,7 @@ class PunkEngine(var name: String,
     setIcon(punk.imageIcon)
     setSize(this.getPreferredSize)
     movePatternAction()
-    collisionEngine()
+    heroEngine.collisionEngine()
   }
 
   /**
@@ -44,7 +44,7 @@ class PunkEngine(var name: String,
           .foreach(move => {
             if (enemyAlive) {
               applyEnemyMovement(move)
-              checkThunderboltCollision()
+              bulletEngine.checkThunderboltCollision()
               Thread.sleep(100)
             }
           })
@@ -81,42 +81,44 @@ class PunkEngine(var name: String,
     frame
   }
 
-  //  def (user:User).getUserInfo():String = s"Name:${user.name}, Surname${user.surname}, Age:${user.age} "
-
-
   /**
+   * Extension method of [HeroEngine]
    * As long as enemies are alive, we check constantly if any of the enemies of the map hit the main hero.
    * Function to check if the hero collision with an enemy.
    * In case of collision we reduce one heart in the level, and we set the hero like dead.
    * In case we lose all hearts the game is over.
    */
-  private def collisionEngine() = {
-    Future {
-      val deviation = 10
-      while (enemyAlive) {
-        val xComp = Math.abs(heroEngine.hero.x - punk.x)
-        val yComp = Math.abs(heroEngine.hero.y - punk.y)
-        if (xComp <= deviation && yComp <= deviation) {
-          heroEngine.setDeadHero()
+  extension (hEngine:HeroEngine) {
+    def collisionEngine(): Unit = {
+      Future {
+        val deviation = 10
+        while (enemyAlive) {
+          val xComp = Math.abs(hEngine.hero.x - punk.x)
+          val yComp = Math.abs(hEngine.hero.y - punk.y)
+          if (xComp <= deviation && yComp <= deviation) {
+            hEngine.setDeadHero()
+          }
+          Thread.sleep(100)
         }
-        Thread.sleep(100)
       }
     }
   }
 
   /**
-   * Function to check if the punk it's been hit by the bullet
+   * Extension method, Function to check if the punk it's been hit by the bullet
    */
-  private def checkThunderboltCollision(): Unit = {
-    val deviation = 10
-    val xComp = Math.abs(bulletEngine.bullet.x - punk.x)
-    val yComp = Math.abs(bulletEngine.bullet.y - punk.y)
-    if (xComp <= deviation && yComp <= deviation) {
-      deadAnimation()
-      applyEnemyMovement(-1)
-      enemyAlive = false
+    extension (bEngine:BulletEngine){
+      def checkThunderboltCollision(): Unit = {
+        val deviation = 10
+        val xComp = Math.abs(bEngine.bullet.x - punk.x)
+        val yComp = Math.abs(bEngine.bullet.y - punk.y)
+        if (xComp <= deviation && yComp <= deviation) {
+          deadAnimation()
+          applyEnemyMovement(-1)
+          enemyAlive = false
+        }
+      }
     }
-  }
 
   private def deadAnimation(): Unit = {
     punk.x = 540
