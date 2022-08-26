@@ -10,39 +10,39 @@ class BulletEngine() extends JLabel {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
-  val thunderbolt = new Bullet(250,250)
+  val bullet = new Bullet(250,250)
 
   init()
 
   private def init(): Unit = {
     setFocusable(true)
-    setIcon(thunderbolt.imageIcon)
+    setIcon(bullet.imageIcon)
     setSize(this.getPreferredSize)
-    setLocation(thunderbolt.x, thunderbolt.y)
+    setLocation(bullet.x, bullet.y)
   }
 
-  def directionOfThunderbolt(orientation:String,characterX: Int, characterY: Int): Unit = {
-    val thunderboltDuration = System.currentTimeMillis() + 5000
+  def directionOfBullet(orientation:String, characterX: Int, characterY: Int): Unit = {
+    val bulletDuration = System.currentTimeMillis() + 5000
     Future {
-      thunderbolt.x = characterX
-      thunderbolt.y = characterY
-      while (thunderboltDuration > System.currentTimeMillis()) {
-        println(s"########### Thunderbolt X:${thunderbolt.x} Y:${thunderbolt.y}")
+      bullet.x = characterX
+      bullet.y = characterY
+      while (bulletDuration > System.currentTimeMillis()) {
+        println(s"########### Bullet X:${bullet.x} Y:${bullet.y}")
         orientation match {
-          case "left" => thunderbolt.x -= 10
-          case "right" => thunderbolt.x += 10
-          case "up" => thunderbolt.y -= 10
-          case "down" => thunderbolt.y += 10
+          case "left" => bullet.x -= 10
+          case "right" => bullet.x += 10
+          case "up" => bullet.y -= 10
+          case "down" => bullet.y += 10
         }
-        thunderbolt.imageIcon = thunderbolt.images(orientation)
-        setThunderboltPosition()
+        bullet.imageIcon = bullet.images(orientation)
+        setBulletPosition()
         Thread.sleep(100)
       }
     }
   }
 
-  private def setThunderboltPosition(): Unit = {
-    setIcon(thunderbolt.imageIcon)
-    setLocation(thunderbolt.x, thunderbolt.y)
+  private def setBulletPosition(): Unit = {
+    setIcon(bullet.imageIcon)
+    setLocation(bullet.x, bullet.y)
   }
 }

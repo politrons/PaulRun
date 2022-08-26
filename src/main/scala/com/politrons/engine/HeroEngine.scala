@@ -196,7 +196,7 @@ class HeroEngine(var xPos: Integer,
       case KeyEvent.VK_DOWN =>
         hero.y += 10
       case KeyEvent.VK_F =>
-        thunderboltEngine.directionOfThunderbolt(orientation, hero.x, hero.y)
+        thunderboltEngine.directionOfBullet(orientation, hero.x, hero.y)
       case _ =>
         println("Key not implemented")
     }

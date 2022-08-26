@@ -105,8 +105,8 @@ class PunkEngine(var name: String,
    */
   private def checkThunderboltCollision(): Unit = {
     val deviation = 10
-    val xComp = Math.abs(bulletEngine.thunderbolt.x - punk.x)
-    val yComp = Math.abs(bulletEngine.thunderbolt.y - punk.y)
+    val xComp = Math.abs(bulletEngine.bullet.x - punk.x)
+    val yComp = Math.abs(bulletEngine.bullet.y - punk.y)
     if (xComp <= deviation && yComp <= deviation) {
       deadAnimation()
       setLocation(0, 0)
