@@ -1,6 +1,6 @@
 package com.politrons.level
 
-import com.politrons.engine.{BackgroundEngine, HeartEngine, HeroEngine, PunkEngine, BulletEngine}
+import com.politrons.engine.{BackgroundEngine, BulletEngine, HeartEngine, HeroEngine, PunkEngine}
 import com.politrons.level.PunkPatterns.{punk1MovePattern, punk2MovePattern, punk3MovePattern, punk4MovePattern}
 
 import java.awt.BorderLayout
@@ -41,5 +41,17 @@ class Level extends JFrame {
     setResizable(false)
     setDefaultCloseOperation(3)
   }
+}
 
+object Level {
+
+  enum Orientation(orientation: String) {
+
+    def get: String = orientation
+
+    case Left extends Orientation("left")
+
+    case Right extends Orientation("right")
+
+  }
 }

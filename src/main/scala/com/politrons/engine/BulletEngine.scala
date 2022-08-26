@@ -1,5 +1,6 @@
 package com.politrons.engine
 
+import com.politrons.level.{Level, *}
 import com.politrons.sprite.Bullet
 
 import java.util.concurrent.Executors
@@ -10,7 +11,7 @@ class BulletEngine() extends JLabel {
 
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(10))
 
-  val bullet = new Bullet(250,250)
+  val bullet = new Bullet(250, 250)
 
   init()
 
@@ -21,7 +22,7 @@ class BulletEngine() extends JLabel {
     setLocation(bullet.x, bullet.y)
   }
 
-  def directionOfBullet(orientation:String, heroX: Int, heroY: Int): Unit = {
+  def directionOfBullet(orientation: Level.Orientation, heroX: Int, heroY: Int): Unit = {
     val bulletDuration = System.currentTimeMillis() + 5000
     Future {
       bullet.x = heroX
@@ -29,12 +30,10 @@ class BulletEngine() extends JLabel {
       while (bulletDuration > System.currentTimeMillis()) {
         println(s"########### Bullet X:${bullet.x} Y:${bullet.y}")
         orientation match {
-          case "left" => bullet.x -= 10
-          case "right" => bullet.x += 10
-          case "up" => bullet.y -= 10
-          case "down" => bullet.y += 10
+          case Level.Orientation.Left => bullet.x -= 10
+          case Level.Orientation.Right => bullet.x += 10
         }
-        bullet.imageIcon = bullet.images(orientation)
+        bullet.imageIcon = bullet.images(orientation.get)
         setBulletPosition()
         Thread.sleep(100)
       }
